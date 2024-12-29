@@ -25,8 +25,13 @@ export default function Home() {
 
   useEffect(() => {
     const savedCategories = localStorage.getItem('categories')
+    const savedSelectedCategory = localStorage.getItem('selectedCategory')
+    
     if (savedCategories) {
-      setCategories(JSON.parse(savedCategories))
+      const parsedCategories = JSON.parse(savedCategories)
+      setCategories(parsedCategories)
+      // Se houver uma categoria salva, use-a, senão use a primeira categoria
+      setSelectedCategory(savedSelectedCategory || parsedCategories[0]?.name || null)
     } else {
       // Set default categories
       const defaultCategories: Category[] = [
@@ -74,7 +79,9 @@ export default function Home() {
         ]}
       ]
       setCategories(defaultCategories)
+      setSelectedCategory(defaultCategories[0]?.name || null)
       localStorage.setItem('categories', JSON.stringify(defaultCategories))
+      localStorage.setItem('selectedCategory', defaultCategories[0]?.name || '')
     }
   }, [])
 
@@ -116,7 +123,10 @@ export default function Home() {
     })
     
     setCategories(fullyShuffled)
+    // Seleciona automaticamente a primeira categoria após randomização
+    setSelectedCategory(fullyShuffled[0]?.name || null)
     localStorage.setItem('categories', JSON.stringify(fullyShuffled))
+    localStorage.setItem('selectedCategory', fullyShuffled[0]?.name || '')
   }
 
   const editCategory = (oldName: string, newName: string) => {
@@ -175,6 +185,7 @@ export default function Home() {
                 className="flex items-center justify-between bg-secondary p-3 rounded-lg cursor-pointer hover:bg-secondary/80 transition-colors"
                 onClick={() => {
                   setSelectedCategory(category.name);
+                  localStorage.setItem('selectedCategory', category.name);
                   setActiveTab("activities");
                 }}
               >
