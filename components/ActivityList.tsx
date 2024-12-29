@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Button } from "@/components/ui/button"
-import { Trash2 } from 'lucide-react'
 import EditableText from './EditableText'
 
 type Activity = {
@@ -19,7 +17,7 @@ type ActivityListProps = {
   onEditActivity: (oldName: string, newName: string, newUrl?: string, newWeight?: number) => void
 }
 
-export default function ActivityList({ activities, categoryName, onDeleteActivity, onEditActivity }: ActivityListProps) {
+export default function ActivityList({ activities, onEditActivity }: ActivityListProps) {
   const [shuffledActivities, setShuffledActivities] = useState(activities)
 
   useEffect(() => {
@@ -28,15 +26,6 @@ export default function ActivityList({ activities, categoryName, onDeleteActivit
 
   if (activities.length === 0) {
     return <p className="text-center text-muted-foreground">No activities in this category yet.</p>
-  }
-
-  const formatLastUsed = (lastUsed: string | undefined) => {
-    if (!lastUsed) return 'Never used'
-    const date = new Date(lastUsed)
-    const days = Math.floor((Date.now() - date.getTime()) / (24 * 60 * 60 * 1000))
-    if (days === 0) return 'Today'
-    if (days === 1) return 'Yesterday'
-    return `${days} days ago`
   }
 
   return (

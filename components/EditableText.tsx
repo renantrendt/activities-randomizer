@@ -1,9 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Pencil, Check, X } from 'lucide-react'
 
 type EditableTextProps = {
   initialText: string
@@ -17,52 +15,62 @@ export default function EditableText({ initialText, initialUrl, onSave, classNam
   const [text, setText] = useState(initialText)
   const [url, setUrl] = useState(initialUrl || '')
 
-  const handleSave = () => {
-    onSave(text, url || undefined)
-    setIsEditing(false)
-  }
-
-  const handleCancel = () => {
-    setText(initialText)
-    setUrl(initialUrl || '')
-    setIsEditing(false)
+  const handleSubmit = () => {
+    if (text.trim()) {
+      onSave(text.trim(), url.trim() || undefined)
+      setIsEditing(false)
+    }
   }
 
   if (isEditing) {
     return (
-      <div className={`flex flex-col space-y-2 ${className}`}>
+      <div className={`space-y-2 ${className}`}>
         <Input
+          type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Activity name"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleSubmit()
+            if (e.key === 'Escape') {
+              setText(initialText)
+              setUrl(initialUrl || '')
+              setIsEditing(false)
+            }
+          }}
+          onBlur={handleSubmit}
+          autoFocus
         />
         <Input
+          type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="URL (optional)"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleSubmit()
+            if (e.key === 'Escape') {
+              setText(initialText)
+              setUrl(initialUrl || '')
+              setIsEditing(false)
+            }
+          }}
+          onBlur={handleSubmit}
         />
-        <div className="flex justify-end space-x-2">
-          <Button onClick={handleSave} variant="outline" size="sm">
-            <Check size={16} className="mr-2" /> Save
-          </Button>
-          <Button onClick={handleCancel} variant="ghost" size="sm">
-            <X size={16} className="mr-2" /> Cancel
-          </Button>
-        </div>
       </div>
     )
   }
 
   return (
-    <div className={`flex items-center justify-between w-full ${className}`}>
+    <div 
+      className={`cursor-pointer ${className}`} 
+      onClick={() => setIsEditing(true)}
+    >
       {url ? (
         <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
           {text}
         </a>
       ) : (
-        <span>{text}</span>
+        text
       )}
     </div>
   )
 }
-

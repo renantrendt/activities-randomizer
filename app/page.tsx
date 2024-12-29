@@ -3,11 +3,8 @@
 import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import AddCategory from '@/components/AddCategory'
-import AddActivity from '@/components/AddActivity'
 import ActivityList from '@/components/ActivityList'
 import EditableText from '@/components/EditableText'
-import { Trash2, Pencil } from 'lucide-react'
 
 type Activity = {
   name: string
