@@ -119,49 +119,11 @@ export default function Home() {
     localStorage.setItem('categories', JSON.stringify(fullyShuffled))
   }
 
-  const addCategory = (name: string) => {
-    const newCategories = [...categories, { name, activities: [] }]
-    setCategories(newCategories)
-    localStorage.setItem('categories', JSON.stringify(newCategories))
-  }
-
-  const addActivity = (categoryName: string, activityName: string, url?: string) => {
-    const newCategories = categories.map(category => 
-      category.name === categoryName 
-        ? { ...category, activities: [...category.activities, { 
-            name: activityName, 
-            url,
-            weight: 1, // default weight
-            lastUsed: null 
-          }] }
-        : category
-    )
-    setCategories(newCategories)
-    localStorage.setItem('categories', JSON.stringify(newCategories))
-  }
-
-  const deleteActivity = (categoryName: string, activityName: string) => {
-    const newCategories = categories.map(category => 
-      category.name === categoryName 
-        ? { ...category, activities: category.activities.filter(a => a.name !== activityName) }
-        : category
-    )
-    setCategories(newCategories)
-    localStorage.setItem('categories', JSON.stringify(newCategories))
-  }
-
-  const deleteCategory = (categoryName: string) => {
-    const newCategories = categories.filter(category => category.name !== categoryName)
-    setCategories(newCategories)
-    localStorage.setItem('categories', JSON.stringify(newCategories))
-    if (selectedCategory === categoryName) {
-      setSelectedCategory(null)
-    }
-  }
-
   const editCategory = (oldName: string, newName: string) => {
     const newCategories = categories.map(category =>
-      category.name === oldName ? { ...category, name: newName } : category
+      category.name === oldName
+        ? { ...category, name: newName }
+        : category
     )
     setCategories(newCategories)
     localStorage.setItem('categories', JSON.stringify(newCategories))
@@ -179,6 +141,16 @@ export default function Home() {
               activity.name === oldName ? { name: newName, url: newUrl, weight: newWeight } : activity
             )
           }
+        : category
+    )
+    setCategories(newCategories)
+    localStorage.setItem('categories', JSON.stringify(newCategories))
+  }
+
+  const deleteActivity = (categoryName: string, activityName: string) => {
+    const newCategories = categories.map(category => 
+      category.name === categoryName 
+        ? { ...category, activities: category.activities.filter(a => a.name !== activityName) }
         : category
     )
     setCategories(newCategories)
